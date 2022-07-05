@@ -1,5 +1,5 @@
 const { client } = require("../DB/db");
-
+const { NotFoundException } = require("../Errors");
 const addLanguage = async (language) => {
   const result = await client.query(
     `INSERT INTO public.language(
@@ -40,6 +40,8 @@ const getLanguage = async (id) => {
               `,
     [id]
   );
+  if (result.rows.length === 0)
+    throw new NotFoundException("Language not found");
   return result.rows[0];
 };
 

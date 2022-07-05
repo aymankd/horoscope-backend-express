@@ -24,12 +24,6 @@ function getZodiacWithSymbolsOfLanguageValidator(req, res, next) {
   else next();
 }
 
-function getValidator(req, res, next) {
-  const { error } = getShema.validate(req.query);
-  if (error) res.status(501).send(error);
-  else next();
-}
-
 module.exports = {
   postZodiacWithLanguageValidator,
   getZodiacWithSymbolsOfLanguageValidator,

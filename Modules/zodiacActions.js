@@ -27,6 +27,7 @@ const getZodiacsofLanguage = async (langagueid) => {
       WHERE public.zodiacdata.langague = $1 ;`,
     [langagueid]
   );
+  console.log(result.rows);
   return result.rows;
 };
 
@@ -41,6 +42,7 @@ const getZodiacWithSymbolsOfLanguage = async (langagueid) => {
       return zodiac;
     })
   );
+  console.log(zodiacswithSymbols);
   return zodiacswithSymbols;
 };
 

@@ -14,22 +14,22 @@ const {
 router.get("/", function (_, res) {
   getZodiacs()
     .then((zodiacs) => res.status(200).json(zodiacs))
-    .catch((err) => res.status(500).send(err));
+    .catch((err) => res.status(err.code || 500).send(err));
 });
 /* Post zodiacs for language. */
 router.post("/", postZodiacWithLanguageValidator, function (req, res) {
   AddZodiac(req.query.language, req.body)
     .then((comment) => res.status(200).json(comment))
-    .catch((err) => res.status(500).send(err));
+    .catch((err) => res.status(err.code || 500).send(err));
 });
 /* Get zodiacs with Signs */
 router.get(
   "/signDetails",
   getZodiacWithSymbolsOfLanguageValidator,
   function (req, res) {
-    getZodiacWithSymbolsOfLanguage(req.language)
+    getZodiacWithSymbolsOfLanguage(req.query.language)
       .then((zodiacs) => res.status(200).json(zodiacs))
-      .catch((err) => res.status(500).send(err));
+      .catch((err) => res.status(err.code || 500).send(err));
   }
 );
 
