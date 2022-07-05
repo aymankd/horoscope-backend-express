@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const logger = require("morgan");
 const app = express();
-const routes = require("./routes");
+const routes = require("./Routes");
 app.use(cors());
 app.use(logger("combined"));
 app.use(express.json());
