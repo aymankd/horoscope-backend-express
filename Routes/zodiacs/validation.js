@@ -18,13 +18,24 @@ function postZodiacWithLanguageValidator(req, res, next) {
   else next();
 }
 
-function getZodiacWithSymbolsOfLanguageValidator(req, res, next) {
+function getZodiacsWithSymbolsOfLanguageValidator(req, res, next) {
   const { error } = zodiacqueryschema.validate(req.query);
   if (error) res.status(501).send(error);
   else next();
 }
 
+function getZodiacWithSymbolsOfLanguageValidator(req, res, next) {
+  const { language } = req.query;
+  if (!language)
+    return res.status(501).send("Query Param 'language' is required");
+  const { zodiacid } = req.params;
+  if (!zodiacid)
+    return res.status(501).send("Query Param 'zodiacid' is required");
+  next();
+}
+
 module.exports = {
   postZodiacWithLanguageValidator,
+  getZodiacsWithSymbolsOfLanguageValidator,
   getZodiacWithSymbolsOfLanguageValidator,
 };

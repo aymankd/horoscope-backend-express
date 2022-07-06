@@ -3,11 +3,13 @@ var router = express.Router();
 const {
   AddZodiac,
   getZodiacs,
+  getZodiacsWithSymbolsOfLanguage,
   getZodiacWithSymbolsOfLanguage,
 } = require("../../Modules/index");
 const {
   postZodiacWithLanguageValidator,
   getZodiacWithSymbolsOfLanguageValidator,
+  getZodiacsWithSymbolsOfLanguageValidator,
 } = require("./validation");
 
 /* Get Base zodiacs */
@@ -25,9 +27,19 @@ router.post("/", postZodiacWithLanguageValidator, function (req, res) {
 /* Get zodiacs with Signs */
 router.get(
   "/signDetails",
+  getZodiacsWithSymbolsOfLanguageValidator,
+  function (req, res) {
+    getZodiacsWithSymbolsOfLanguage(req.query.language)
+      .then((zodiacs) => res.status(200).json(zodiacs))
+      .catch((err) => res.status(err.code || 500).send(err));
+  }
+);
+
+router.get(
+  "/:zodiacid/signDetails",
   getZodiacWithSymbolsOfLanguageValidator,
   function (req, res) {
-    getZodiacWithSymbolsOfLanguage(req.query.language)
+    getZodiacWithSymbolsOfLanguage(req.query.language, req.params.zodiacid)
       .then((zodiacs) => res.status(200).json(zodiacs))
       .catch((err) => res.status(err.code || 500).send(err));
   }

@@ -31,7 +31,19 @@ const getZodiacsofLanguage = async (langagueid) => {
   return result.rows;
 };
 
-const getZodiacWithSymbolsOfLanguage = async (langagueid) => {
+const getZodiacofLanguage = async (zodiacid, langagueid) => {
+  const result = await client.query(
+    `SELECT *
+    FROM public.zodiac
+      INNER JOIN public.zodiacdata ON public.zodiacdata.zodiacid = public.zodiac.name 
+      WHERE public.zodiacdata.langague = $1 and public.zodiacdata.zodiacid = $2 ;`,
+    [langagueid, zodiacid]
+  );
+  console.log(result.rows);
+  return result.rows[0];
+};
+
+const getZodiacsWithSymbolsOfLanguage = async (langagueid) => {
   const zodiacs = await getZodiacsofLanguage(langagueid);
   const zodiacswithSymbols = await Promise.all(
     zodiacs.map(async (zodiac) => {
@@ -46,9 +58,20 @@ const getZodiacWithSymbolsOfLanguage = async (langagueid) => {
   return zodiacswithSymbols;
 };
 
+const getZodiacWithSymbolsOfLanguage = async (langagueid, zodiacid) => {
+  const zodiac = await getZodiacofLanguage(zodiacid, langagueid);
+  if (!zodiac) return null;
+  zodiac.symbols = await getSymbolOfZodiacByLanguage(
+    zodiac.zodiacid,
+    langagueid
+  );
+  return zodiac;
+};
+
 module.exports = {
   AddZodiac: AddZodiac,
   getZodiacs: getZodiacs,
   getZodiacsofLanguage: getZodiacsofLanguage,
+  getZodiacsWithSymbolsOfLanguage: getZodiacsWithSymbolsOfLanguage,
   getZodiacWithSymbolsOfLanguage: getZodiacWithSymbolsOfLanguage,
 };
