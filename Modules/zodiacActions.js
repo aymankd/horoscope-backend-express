@@ -14,6 +14,18 @@ const AddZodiac = async (langagueid, zodiac) => {
   return result.rows[0];
 };
 
+const UpdateZodiac = async (langagueid, zodiac) => {
+  const result = await client.query(
+    `UPDATE public.zodiacdata SET name=$1 ,description=$2
+        WHERE langague = $3 and zodiacid = $4 
+          returning *;
+          `,
+    [zodiac?.name, zodiac?.description, langagueid, zodiac?.zodiacid]
+  );
+  console.log("result", result);
+  return result.rows[0];
+};
+
 const getZodiacs = async () => {
   const result = await client.query(`SELECT * FROM public.zodiac;`);
   return result.rows;
@@ -74,4 +86,5 @@ module.exports = {
   getZodiacsofLanguage: getZodiacsofLanguage,
   getZodiacsWithSymbolsOfLanguage: getZodiacsWithSymbolsOfLanguage,
   getZodiacWithSymbolsOfLanguage: getZodiacWithSymbolsOfLanguage,
+  UpdateZodiac: UpdateZodiac,
 };

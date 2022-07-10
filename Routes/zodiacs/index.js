@@ -5,6 +5,7 @@ const {
   getZodiacs,
   getZodiacsWithSymbolsOfLanguage,
   getZodiacWithSymbolsOfLanguage,
+  UpdateZodiac,
 } = require("../../Modules/index");
 const {
   postZodiacWithLanguageValidator,
@@ -21,6 +22,12 @@ router.get("/", function (_, res) {
 /* Post zodiacs for language. */
 router.post("/", postZodiacWithLanguageValidator, function (req, res) {
   AddZodiac(req.query.language, req.body)
+    .then((comment) => res.status(200).json(comment))
+    .catch((err) => res.status(err.code || 500).send(err));
+});
+/* Put zodiacs for language. */
+router.put("/", postZodiacWithLanguageValidator, function (req, res) {
+  UpdateZodiac(req.query.language, req.body)
     .then((comment) => res.status(200).json(comment))
     .catch((err) => res.status(err.code || 500).send(err));
 });

@@ -12,6 +12,16 @@ const addSymbol = async (lang, symbol) => {
   return result.rows[0];
 };
 
+const deleteSymbol = async (lang, symbol) => {
+  const result = await client.query(
+    ` DELETE FROM public.symbol
+      WHERE zodiacid=$1 and lang=$2 and name=$3 ;
+            `,
+    [symbol?.zodiacid, lang, symbol?.name]
+  );
+  return result.rows[0];
+};
+
 const getSymbolOfZodiacByLanguage = async (zodiacid, langid) => {
   const result = await client.query(
     ` SELECT zodiacid, lang, name, value
@@ -26,4 +36,5 @@ const getSymbolOfZodiacByLanguage = async (zodiacid, langid) => {
 module.exports = {
   addSymbol: addSymbol,
   getSymbolOfZodiacByLanguage: getSymbolOfZodiacByLanguage,
+  deleteSymbol: deleteSymbol,
 };

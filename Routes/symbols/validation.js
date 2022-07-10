@@ -10,6 +10,11 @@ const postSymbolSchema = Joi.object({
   value: Joi.string().required(),
 }).required();
 
+const deleteSymbolSchema = Joi.object({
+  zodiacid: Joi.string().required(),
+  name: Joi.string().required(),
+}).required();
+
 function getZodiacSymbolValidator(req, res, next) {
   const { error } = getZodiacSymbolSchema.validate(req.params);
   if (error) res.status(501).send(error);
@@ -24,7 +29,16 @@ function postSymbolValidator(req, res, next) {
   else next();
 }
 
+function deleteSymbolValidator(req, res, next) {
+  if (!req.query.language)
+    res.status(501).send("Query param 'language' is required");
+  const { error } = deleteSymbolSchema.validate(req.body);
+  if (error) res.status(501).send(error);
+  else next();
+}
+
 module.exports = {
   getZodiacSymbolValidator,
   postSymbolValidator,
+  deleteSymbolValidator,
 };

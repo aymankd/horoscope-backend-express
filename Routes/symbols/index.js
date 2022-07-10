@@ -3,10 +3,12 @@ var router = express.Router();
 const {
   getSymbolOfZodiacByLanguage,
   addSymbol,
+  deleteSymbol,
 } = require("../../Modules/index");
 const {
   getZodiacSymbolValidator,
   postSymbolValidator,
+  deleteSymbolValidator,
 } = require("./validation");
 /* Get symbols of a zodiac */
 router.get(
@@ -18,6 +20,14 @@ router.get(
       .catch((err) => res.status(err.code || 500).send(err));
   }
 );
+
+/* Delete zodiac symbol  */
+router.delete("/", deleteSymbolValidator, function (req, res) {
+  deleteSymbol(req.query.language, req.body)
+    .then((symbol) => res.status(200).json(symbol))
+    .catch((err) => res.status(err.code || 500).send(err));
+});
+
 /* Post zodiac symbol  */
 router.post("/", postSymbolValidator, function (req, res) {
   addSymbol(req.query.language, req.body)
